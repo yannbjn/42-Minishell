@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jfita <jfita@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:45:29 by yabejani          #+#    #+#             */
-/*   Updated: 2024/06/27 14:24:48 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/06/29 13:15:14 by jfita            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ void	ft_echo(t_shell *shell, t_cmd *cmd)
 	}
 	if (!flag)
 		printf("\n");
-	ext = shell->excode;
+	if (cmd->next)
+		ext = shell->excode;
+	else
+		ext = shell->tmpexcode;
 	ft_freeshell(shell);
 	exit(ext);
 }

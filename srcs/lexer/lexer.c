@@ -6,11 +6,47 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:41:27 by jfita             #+#    #+#             */
-/*   Updated: 2024/06/27 14:06:58 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:31:12 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+void	synterr(t_shell *shell, t_lex *new, int err, int *f)
+{
+	shell->excode = 2;
+	if (err == 1)
+		ft_perror(shell, SYNTERR, new->word, NULL);
+	else if (err == 2)
+		ft_perror(shell, SYNTERR, new->next->word, NULL);
+	else if (err == 0)
+		ft_perror(shell, SYNTERR, "'newline'", NULL);
+	(*f) = 1;
+}
+
+void	check_syntax(t_shell *shell, t_lex *new, int f)
+{
+	int	err;
+
+	err = 0;
+	while (new && new->next)
+	{
+		if (new->token == PIPE && !f)
+		{
+			if (!new->prev)
+				err = 1;
+			if (new->next->token == PIPE)
+				err = 2;
+		}
+		if (new->istoken && new->token != PIPE && new->next->istoken && !f)
+			err = 2;
+		if (err && !f)
+			synterr(shell, new, err, &f);
+		new = new->next;
+	}
+	if (new && new->istoken && !new->next && !f)
+		synterr(shell, new, err, &f);
+}
 
 static void	check_open_quotes(t_shell *shell, char *input, int flag)
 {

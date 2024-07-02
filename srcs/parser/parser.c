@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jfita <jfita@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:26:25 by yabejani          #+#    #+#             */
-/*   Updated: 2024/06/27 14:37:53 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:03:09 by jfita            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	updatelastcmd(t_shell *shell)
 			getlastcmd(shell, env, cmd);
 		env = env->next;
 	}
+	update_envp(shell);
 }
 
 void	parser(t_shell *shell)

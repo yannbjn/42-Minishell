@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:35:44 by yabejani          #+#    #+#             */
-/*   Updated: 2024/06/27 15:35:56 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:34:45 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 
 # define ERRARG "No args allowed"
 # define MERROR "Malloc error"
-# define SYNTERR "minishell: syntax error near unexpected token "
+# define SYNTERR "syntax error near unexpected token"
 # define NOSUCH "No such file or directory"
 # define CMDFAIL "command not found"
 # define NOTV "not a valid identifier"
@@ -152,6 +152,8 @@ typedef struct s_shell
 	char			*inp;
 	char			*newinp;
 	char			*finalinp;
+	int				inflagerr;
+	int				outflagerr;
 }					t_shell;
 
 void				init_shell(t_shell *shell, char **envp);
@@ -177,7 +179,7 @@ void				handle_quotes(char c, t_flags *flags);
 char				*expand_dollar(t_shell *shell, char *str, t_flags *flags,
 						t_env *node);
 char				*is_not_alnum(t_shell *shell, char *str, int j);
-char				*is_num(t_shell *shell, char *str, int j);
+char				*is_num(char *str, int j);
 char				*ftsjb(char *s1, char *s2);
 char				*ft_strdupfree(char *s);
 char				*pos_no_quotes(char *wrd);
@@ -213,6 +215,7 @@ void				close_fds(t_fds *fd);
 void				close_fds_parent(t_fds *fd);
 void				set_redirs(t_fds *fd);
 void				init_fds(t_fds *fd);
+void				ft_pipes(t_shell *shell, t_cmd *cmd, t_fds *fd);
 void				check_builtins(t_cmd *cmd);
 void				child_builtin(t_shell *shell, t_cmd *cmd, t_fds *fd);
 void				exec_builtin(t_shell *shell, t_cmd *cmd);

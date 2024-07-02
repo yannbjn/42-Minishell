@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jfita <jfita@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 16:49:23 by yabejani          #+#    #+#             */
-/*   Updated: 2024/06/27 14:19:35 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/06/29 18:04:08 by jfita            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,29 +24,6 @@ void	assign_enum(t_lex *new)
 		new->token = LOWER;
 	if (ft_strictcmp(new->word, "<<"))
 		new->token = D_LOWER;
-}
-
-void	check_syntax(t_shell *shell, t_lex *new, int f)
-{
-	while (new && new->next)
-	{
-		if (new->istoken && !f)
-		{
-			if (new->next->istoken)
-			{
-				ft_perror(shell, SYNTERR, new->next->word, NULL);
-				f = 1;
-				shell->excode = 2;
-			}
-		}
-		new = new->next;
-	}
-	if (new && new->istoken && !new->next && !f)
-	{
-		ft_perror(shell, SYNTERR, "'newline'", NULL);
-		f = 1;
-		shell->excode = 2;
-	}
 }
 
 void	is_redir(t_shell *shell)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jfita <jfita@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 12:47:37 by yabejani          #+#    #+#             */
-/*   Updated: 2024/06/27 14:23:36 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/06/29 12:35:34 by jfita            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	ft_getenv(t_shell *shell, char **envp)
 	i = 0;
 	shell->envp = NULL;
 	shell->tmpexcode = 0;
+	shell->inflagerr = 0;
+	shell->outflagerr = 0;
 	if (!envp || !envp[i])
 	{
 		ft_no_env(shell);

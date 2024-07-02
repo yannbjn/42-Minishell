@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 15:01:44 by yabejani          #+#    #+#             */
-/*   Updated: 2024/06/27 15:12:04 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:34:33 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,17 @@ void	close_fds(t_fds *fd)
 		close(fd->pipes[0]);
 	if (!(fd->pipes[1] == -42) && fd->pipes[1] >= 0)
 		close(fd->pipes[1]);
-	if (!(fd->savedpipe == -42) && fd->savedpipe >= -1)
+	if (!(fd->savedpipe == -42) && fd->savedpipe >= 0)
 		close(fd->savedpipe);
+}
+
+void	ft_pipes(t_shell *shell, t_cmd *cmd, t_fds *fd)
+{
+	if (cmd->prev)
+		fd->prevpipe = true;
+	else
+		fd->prevpipe = false;
+	if (cmd->next)
+		if (pipe(fd->pipes) == -1)
+			exitmsg(shell, "pipe");
 }

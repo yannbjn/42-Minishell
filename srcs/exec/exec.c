@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:28:44 by yabejani          #+#    #+#             */
-/*   Updated: 2024/06/27 15:35:52 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:34:21 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ void	children(t_shell *shell, t_cmd *cmd, t_fds *fd)
 	{
 		if (!cmd->path)
 			ft_perror(shell, cmd->tab[0], strerror(errno), NULL);
+		close_fds(fd);
+		exitmsg(shell, NULL);
+	}
+	else if (!cmd->path)
+	{
 		close_fds(fd);
 		exitmsg(shell, NULL);
 	}
@@ -94,17 +99,13 @@ void	start_exec(t_shell *shell, t_cmd *cmd)
 	while (cmd)
 	{
 		init_fds(&fd);
-		if (cmd->prev)
-			fd.prevpipe = true;
-		else
-			fd.prevpipe = false;
-		if (cmd->next)
-			if (pipe(fd.pipes) == -1)
-				exitmsg(shell, "pipe");
+		ft_pipes(shell, cmd, &fd);
 		handle_redir(shell, cmd, &fd);
 		if (shell->excode == 130)
 			break ;
 		set_redirs(&fd);
+		if (!cmd->path && cmd->builtin == NOT)
+			close_fds(&fd);
 		if (cmd->tab[0])
 			ft_exec(shell, cmd, &fd);
 		if (!cmd->next)

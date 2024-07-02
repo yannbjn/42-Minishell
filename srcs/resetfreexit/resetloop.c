@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   resetloop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jfita <jfita@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 13:46:32 by yabejani          #+#    #+#             */
-/*   Updated: 2024/06/27 14:03:38 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/06/29 12:35:59 by jfita            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	resetloop(t_shell *shell)
 
 	lex = shell->lex;
 	cmd = shell->cmd;
+	shell->inflagerr = 0;
+	shell->outflagerr = 0;
 	if (shell->tabpath)
 		free_tab(shell->tabpath);
 	freelex(&lex);

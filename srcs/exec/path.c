@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 17:23:32 by yabejani          #+#    #+#             */
-/*   Updated: 2024/06/27 15:18:08 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:35:13 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,23 +81,27 @@ void	handle_withpath(t_shell *shell, t_cmd *c, int i, int flag)
 {
 	char	*tmp;
 
-	while (c && c->tab[0])
+	while (c)
 	{
 		i = -1;
-		if (withpath(shell, &c))
-			continue ;
-		flag = 0;
-		while (shell->tabpath && shell->tabpath[++i])
+		if (c->tab[0])
 		{
-			tmp = ft_strjoinfree(ft_strjoin(shell->tabpath[i], "/"), c->tab[0]);
-			if (!tmp)
-				exitmsg(shell, MERROR);
-			if (access(tmp, X_OK) == 0)
-				set_cmd_path(shell, c, tmp, &flag);
-			(free(tmp), tmp = NULL);
+			if (withpath(shell, &c))
+				continue ;
+			flag = 0;
+			while (shell->tabpath && shell->tabpath[++i])
+			{
+				tmp = ft_strjoinfree(ft_strjoin(shell->tabpath[i], "/"),
+						c->tab[0]);
+				if (!tmp)
+					exitmsg(shell, MERROR);
+				if (access(tmp, X_OK) == 0)
+					set_cmd_path(shell, c, tmp, &flag);
+				(free(tmp), tmp = NULL);
+			}
+			if (!flag && c->builtin == NOT)
+				set_path_anyway(shell, c);
 		}
-		if (!flag && c->builtin == NOT)
-			set_path_anyway(shell, c);
 		c = c->next;
 	}
 }
