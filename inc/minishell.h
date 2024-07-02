@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:35:44 by yabejani          #+#    #+#             */
-/*   Updated: 2024/07/01 14:34:45 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:21:02 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ typedef struct s_export
 	int				i;
 	int				j;
 	int				flag;
+	int				h;
 }					t_export;
 
 typedef struct s_shell

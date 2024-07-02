@@ -6,13 +6,13 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 17:19:41 by yabejani          #+#    #+#             */
-/*   Updated: 2024/06/21 18:30:18 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/07/02 13:27:09 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static void	expperror(t_shell *shell, char *word, char *msg, char *third)
+static void	eperr(t_shell *shell, char *word, char *msg, char *third)
 {
 	int	saved_stdout;
 
@@ -49,27 +49,27 @@ void	init_export_struct(t_export *exp)
 
 int	ft_expbefkey(t_shell *shell, t_cmd *cmd, t_export *exp)
 {
-	if (!isalpha(cmd->tab[1][0]) && !exp->flag)
+	if (!isalpha(cmd->tab[exp->h][0]) && !exp->flag)
 	{
-		expperror(shell, E, cmd->tab[1], NOTV);
+		eperr(shell, E, cmd->tab[exp->h], NOTV);
 		return (shell->excode = 1, 0);
 	}
-	else if (!ft_isalnum(cmd->tab[1][exp->i]) && cmd->tab[1][exp->i] != '='
-		&& !exp->flag)
+	else if (!ft_isalnum(cmd->tab[exp->h][exp->i])
+		&& cmd->tab[exp->h][exp->i] != '=' && !exp->flag)
 	{
-		expperror(shell, E, cmd->tab[1], NOTV);
+		eperr(shell, E, cmd->tab[exp->h], NOTV);
 		return (shell->excode = 1, 0);
 		exp->i++;
 	}
-	else if (cmd->tab[1][exp->i] == '=' && !exp->flag)
+	else if (cmd->tab[exp->h][exp->i] == '=' && !exp->flag)
 	{
 		exp->flag = 1;
-		exp->key = ft_strndup(cmd->tab[1], exp->i++);
+		exp->key = ft_strndup(cmd->tab[exp->h], exp->i++);
 		if (!exp->key)
 			exitmsg(shell, MERROR);
 		else if (!exp->key[0])
 		{
-			return (expperror(shell, E, cmd->tab[1], NOTV), free(exp->key), 0);
+			return (eperr(shell, E, cmd->tab[exp->h], NOTV), free(exp->key), 0);
 			shell->excode = 1;
 		}
 	}
@@ -91,27 +91,31 @@ void	ft_export(t_shell *shell, t_cmd *cmd)
 {
 	t_export	exp;
 
-	init_export_struct(&exp);
+	exp.h = 0;
 	if (!cmd->tab[1])
 		return ;
-	while (cmd->tab[1][++exp.i])
+	while (cmd->tab[++exp.h])
 	{
-		if (!ft_expbefkey(shell, cmd, &exp))
-			return ;
-		if (exp.flag)
+		init_export_struct(&exp);
+		while (cmd->tab[exp.h][++exp.i])
 		{
-			exp.j = exp.i;
-			while (cmd->tab[1][exp.j])
-				exp.j++;
-			exp.value = ft_strndup(cmd->tab[1] + exp.i, exp.j);
-			if (!exp.value)
-				(free(exp.key), exitmsg(shell, MERROR));
-			break ;
+			if (!ft_expbefkey(shell, cmd, &exp))
+				return ;
+			if (exp.flag)
+			{
+				exp.j = exp.i;
+				while (cmd->tab[exp.h][exp.j])
+					exp.j++;
+				exp.value = ft_strndup(cmd->tab[exp.h] + exp.i, exp.j);
+				if (!exp.value)
+					(free(exp.key), exitmsg(shell, MERROR));
+				break ;
+			}
 		}
+		check_if_addtoenv(shell, cmd, &exp);
 	}
-	check_if_addtoenv(shell, cmd, &exp);
 }
 
-// flag pour le unset ou pas dasn t_env pour savoir si print 
-//gnagnagna gnagnagna gnagnagna je trouve tjrs des pbs je m'appelle Jules
+// flag pour le unset ou pas dasn t_env pour savoir si print
+// gnagnagna gnagnagna gnagnagna je trouve tjrs des pbs je m'appelle Jules
 // gnagnagna changer le join pour envp null \0 gnagnagna pas /0 mais \0
